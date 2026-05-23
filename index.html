@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0d9488">
+<meta name="apple-mobile-web-app-title" content="HidratIV">
+<meta name="format-detection" content="telephone=no">
+<title>Hidratación IV Pediátrica</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%230d9488'/><stop offset='1' stop-color='%230891b2'/></linearGradient></defs><rect width='100' height='100' rx='22' fill='url(%23g)'/><path d='M50 18 L50 30 M44 24 L56 24' stroke='white' stroke-width='4' stroke-linecap='round'/><rect x='38' y='30' width='24' height='32' rx='4' fill='none' stroke='white' stroke-width='3.5'/><path d='M42 46 Q50 56 50 64 Q50 76 50 78' stroke='%23bae6fd' stroke-width='3' fill='none' stroke-linecap='round'/><circle cx='50' cy='78' r='6' fill='%23bae6fd'/><path d='M44 70 L50 80 L56 70 Z' fill='white'/></svg>">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="manifest" href="./manifest.webmanifest">
+<style>
+  *, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --bg-grad-1: #ecfeff;
+    --bg-grad-2: #f0fdfa;
+    --card: #ffffff;
+    --primary: #0d9488;
+    --primary-dark: #0f766e;
+    --primary-light: #ccfbf1;
+    --accent: #0891b2;
+    --accent-dark: #0e7490;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #e2e8f0;
+    --shadow: 0 4px 16px rgba(13, 148, 136, 0.08);
+    --shadow-lg: 0 10px 30px rgba(13, 148, 136, 0.15);
+    --danger: #dc2626;
+    --warning: #d97706;
+    --success: #059669;
+    --info: #0284c7;
+    --radius: 16px;
+  }
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+  html, body {
+    margin: 0; padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: linear-gradient(165deg, var(--bg-grad-1) 0%, var(--bg-grad-2) 100%);
+    color: var(--text);
+    min-height: 100vh;
+    min-height: 100dvh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    overscroll-behavior-y: contain;
+  }
+  .app {
+    max-width: 520px; margin: 0 auto;
+    padding-top: 16px;
+    padding-top: max(env(safe-area-inset-top), 16px);
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 24px;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 24px);
+  }
+  header.hero { padding: 20px 4px 18px; }
+  .hero-row { display: flex; align-items: center; gap: 12px; }
+  .logo {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+  }
+  .logo svg { width: 26px; height: 26px; }
+  .hero h1 {
+    margin: 0; font-size: 1.3rem; font-weight: 700;
+    letter-spacing: -0.02em; color: var(--text);
+  }
+  .hero p { margin: 2px 0 0; font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+  .hero .ref-tag {
+    display: inline-block;
+    margin-top: 6px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(13, 148, 136, 0.06);
+  }
+  .card-title {
+    font-size: 0.78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--primary-dark);
+    margin: 0 0 14px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-title::before {
+    content: "";
+    width: 4px; height: 16px;
+    background: linear-gradient(180deg, var(--primary), var(--accent));
+    border-radius: 2px;
+  }
+
+  .input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .input-row + .input-row { margin-top: 12px; }
+  .input-group { margin: 0; }
+  label {
+    display: block; font-size: 0.85rem; font-weight: 600;
+    color: var(--text); margin-bottom: 6px;
+  }
+  .input-wrap { position: relative; }
+  input[type="number"] {
+    width: 100%; height: 54px;
+    padding: 0 50px 0 14px;
+    font-size: 1.15rem; font-weight: 600;
+    color: var(--text);
+    background: #f8fafc;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    outline: none;
+    transition: all 0.2s ease;
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+    font-family: inherit;
+  }
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type="number"]:focus {
+    border-color: var(--primary); background: #fff;
+    box-shadow: 0 0 0 4px var(--primary-light);
+  }
+  .unit {
+    position: absolute; right: 12px; top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    font-size: 0.78rem; font-weight: 600;
+    color: var(--text-muted); pointer-events: none;
+  }
+
+  .divider-line {
+    height: 1px; background: #f1f5f9;
+    margin: 14px -18px 14px;
+  }
+
+  .factor-toggle {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px;
+    padding: 4px 0;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .factor-toggle .text { flex: 1; }
+  .factor-toggle .text strong {
+    display: block;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+  .factor-toggle .text small {
+    display: block;
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+    line-height: 1.35;
+  }
+
+  .gorelik-list { display: flex; flex-direction: column; gap: 4px; }
+  .toggle-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; padding: 12px 4px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: background 0.15s;
+    border-radius: 8px;
+  }
+  .toggle-row:last-child { border-bottom: none; }
+  .toggle-row:active { background: #f8fafc; }
+  .toggle-label {
+    font-size: 0.95rem; font-weight: 500;
+    color: var(--text); line-height: 1.3; flex: 1;
+  }
+  .toggle-num {
+    display: inline-block;
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 0.72rem; font-weight: 700;
+    text-align: center; line-height: 22px;
+    margin-right: 8px;
+    flex-shrink: 0;
+  }
+  .switch { position: relative; width: 52px; height: 32px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+  .slider {
+    position: absolute;
+    top: 0; right: 0; bottom: 0; left: 0;
+    background: #cbd5e1;
+    border-radius: 32px;
+    transition: background 0.25s ease;
+    cursor: pointer;
+  }
+  .slider::before {
+    content: "";
+    position: absolute;
+    height: 26px; width: 26px;
+    left: 3px; top: 3px;
+    background: white;
+    border-radius: 50%;
+    -webkit-transition: -webkit-transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  }
+  .switch input:checked + .slider { background: linear-gradient(135deg, var(--primary), var(--accent)); }
+  .switch input:checked + .slider::before {
+    -webkit-transform: translateX(20px);
+    transform: translateX(20px);
+  }
+
+  .score-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 0.78rem; font-weight: 700;
+    margin-left: auto;
+  }
+  .score-pill span { font-size: 0.95rem; }
+
+  .action-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 10px;
+    margin: 8px 0 16px;
+  }
+  .btn-calc {
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    color: white; border: none;
+    border-radius: 16px;
+    font-size: 1rem; font-weight: 700;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(13, 148, 136, 0.35);
+    transition: -webkit-transform 0.15s, transform 0.15s, box-shadow 0.15s;
+    font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .btn-calc:active {
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+    box-shadow: 0 4px 12px rgba(13, 148, 136, 0.3);
+  }
+  .btn-calc svg { width: 18px; height: 18px; }
+
+  .btn-clear {
+    height: 60px;
+    background: white;
+    color: var(--text-muted);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    font-size: 0.92rem; font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    gap: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .btn-clear:active {
+    background: #f8fafc;
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+    border-color: #cbd5e1;
+  }
+  .btn-clear svg { width: 16px; height: 16px; }
+
+  .result-card {
+    background: linear-gradient(160deg, var(--primary) 0%, var(--accent) 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 22px 20px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card::before {
+    content: "";
+    position: absolute;
+    top: -50px; right: -50px;
+    width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .result-diagnosis {
+    font-size: 0.78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    opacity: 0.85;
+  }
+  .result-diagnosis-text {
+    font-size: 1.15rem; font-weight: 700;
+    line-height: 1.3; margin-bottom: 16px;
+  }
+  .severity-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.22);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    padding: 3px 10px; border-radius: 10px;
+    font-size: 0.72rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin: 6px 0 8px;
+  }
+  .result-divider {
+    height: 1px; background: rgba(255,255,255,0.2);
+    margin: 14px 0;
+  }
+  .result-row {
+    display: flex; justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    font-size: 0.92rem;
+  }
+  .result-row .label { opacity: 0.9; font-weight: 500; }
+  .result-row .value { font-weight: 700; font-size: 1rem; }
+
+  .strategy-block {
+    background: rgba(255,255,255,0.97);
+    color: var(--text);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-top: 14px;
+  }
+  .strategy-eyebrow {
+    font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--primary-dark);
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 6px;
+  }
+  .strategy-eyebrow svg { width: 14px; height: 14px; }
+  .strategy-title {
+    font-size: 1.15rem; font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 4px;
+  }
+  .strategy-sub {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    line-height: 1.4;
+    margin-bottom: 10px;
+  }
+
+  .plan-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .plan-cell {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .plan-cell.full { grid-column: 1 / -1; }
+  .plan-cell .lbl {
+    font-size: 0.68rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--primary-dark);
+    margin-bottom: 4px;
+  }
+  .plan-cell .val {
+    font-size: 1.3rem; font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .plan-cell .val .u {
+    font-size: 0.78rem; color: var(--text-muted); font-weight: 600;
+  }
+  .plan-cell .sub {
+    font-size: 0.72rem; color: var(--text-muted);
+    font-weight: 500; margin-top: 3px;
+    line-height: 1.35;
+  }
+
+  .suero-line {
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--primary-light);
+    border-radius: 10px;
+    font-size: 0.82rem;
+    color: var(--primary-dark);
+    font-weight: 600;
+    line-height: 1.4;
+  }
+  .suero-line strong { font-weight: 800; }
+
+  .alt-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(13, 148, 136, 0.06);
+    border-left: 4px solid var(--accent);
+  }
+  .alt-card h3 {
+    margin: 0 0 6px;
+    font-size: 0.7rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--accent-dark);
+  }
+  .alt-card .alt-name {
+    font-size: 1rem; font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+  .alt-card .alt-detail {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  .alert {
+    padding: 12px 14px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    margin-top: 12px;
+    border-left: 4px solid;
+  }
+  .alert strong { font-weight: 700; }
+  .alert ul { margin: 6px 0 0; padding-left: 20px; }
+  .alert li { margin-bottom: 4px; }
+  .alert li:last-child { margin-bottom: 0; }
+
+  .btn-copy {
+    margin-top: 14px;
+    width: 100%; height: 50px;
+    background: rgba(255,255,255,0.97);
+    color: var(--primary-dark);
+    border: none; border-radius: 14px;
+    font-size: 0.95rem; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    display: flex; align-items: center; justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .btn-copy:active {
+    -webkit-transform: scale(0.98);
+    transform: scale(0.98);
+  }
+  .btn-copy svg { width: 18px; height: 18px; }
+  .btn-copy.copied { background: #ecfdf5; color: var(--success); }
+
+  .paste-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 18px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(13, 148, 136, 0.06);
+  }
+  .paste-header {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .paste-header h3 {
+    margin: 0;
+    font-size: 0.78rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--primary-dark);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .paste-header h3::before {
+    content: "";
+    width: 4px; height: 16px;
+    background: linear-gradient(180deg, var(--primary), var(--accent));
+    border-radius: 2px;
+  }
+  .btn-recopy {
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    border: none; border-radius: 10px;
+    padding: 6px 12px;
+    font-size: 0.78rem; font-weight: 700;
+    cursor: pointer; font-family: inherit;
+    display: inline-flex; align-items: center; gap: 5px;
+    transition: all 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .btn-recopy:active {
+    -webkit-transform: scale(0.96);
+    transform: scale(0.96);
+  }
+  .btn-recopy svg { width: 13px; height: 13px; }
+  .btn-recopy.copied { background: #d1fae5; color: var(--success); }
+  .paste-textarea {
+    width: 100%;
+    min-height: 320px;
+    padding: 14px;
+    background: #f8fafc;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 0.82rem; line-height: 1.5;
+    color: var(--text);
+    resize: vertical; outline: none;
+    transition: border 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .paste-textarea:focus { border-color: var(--primary); background: #fff; }
+  .paste-hint {
+    font-size: 0.75rem; color: var(--text-muted);
+    margin-top: 6px; line-height: 1.4;
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    padding: 16px 8px 24px;
+    line-height: 1.5;
+  }
+  .footer-note strong { color: var(--primary-dark); font-weight: 700; }
+
+  .hidden { display: none; }
+
+  @-webkit-keyframes fadeUp {
+    from { opacity: 0; -webkit-transform: translateY(12px); transform: translateY(12px); }
+    to { opacity: 1; -webkit-transform: translateY(0); transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; -webkit-transform: translateY(12px); transform: translateY(12px); }
+    to { opacity: 1; -webkit-transform: translateY(0); transform: translateY(0); }
+  }
+  .animate-in {
+    -webkit-animation: fadeUp 0.35s ease-out both;
+    animation: fadeUp 0.35s ease-out both;
+  }
+
+  .toast {
+    position: fixed; bottom: 30px; left: 50%;
+    -webkit-transform: translateX(-50%) translateY(80px);
+    transform: translateX(-50%) translateY(80px);
+    background: var(--text); color: white;
+    padding: 12px 20px; border-radius: 24px;
+    font-size: 0.88rem; font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    z-index: 1000;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .toast.show {
+    opacity: 1;
+    -webkit-transform: translateX(-50%) translateY(0);
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast svg { width: 16px; height: 16px; }
+
+  @media (max-width: 360px) {
+    .toggle-label { font-size: 0.88rem; }
+    .plan-cell .val { font-size: 1.15rem; }
+    input[type="number"] { font-size: 1.05rem; padding-right: 42px; }
+    .btn-calc { font-size: 0.92rem; }
+    .btn-clear { font-size: 0.85rem; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="hero">
+    <div class="hero-row">
+      <div class="logo">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 3v3M10 4.5h4" stroke="white" stroke-width="2" stroke-linecap="round"/>
+          <rect x="8" y="6" width="8" height="11" rx="1.5" stroke="white" stroke-width="2"/>
+          <path d="M10 11c1 2 2 3 2 5" stroke="#bae6fd" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+          <circle cx="12" cy="20" r="2" fill="#bae6fd"/>
+        </svg>
+      </div>
+      <div>
+        <h1>Hidratación IV Pediátrica</h1>
+        <p>Gorelick &middot; Holliday-Segar &middot; RIR</p>
+        <span class="ref-tag">SEUP 2024 &middot; GRADE 2022</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="card">
+    <h2 class="card-title">Datos del paciente</h2>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="peso">Peso</label>
+        <div class="input-wrap">
+          <input type="number" id="peso" step="0.1" min="0" inputmode="decimal" placeholder="Ej: 12.5">
+          <span class="unit">kg</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="sodio">Sodio (Na+)</label>
+        <div class="input-wrap">
+          <input type="number" id="sodio" step="1" min="0" inputmode="decimal" placeholder="Ej: 138">
+          <span class="unit">mEq/L</span>
+        </div>
+      </div>
+    </div>
+    <div class="input-row">
+      <div class="input-group">
+        <label for="edadAnos">Edad</label>
+        <div class="input-wrap">
+          <input type="number" id="edadAnos" step="1" min="0" max="18" inputmode="numeric" placeholder="años">
+          <span class="unit">años</span>
+        </div>
+      </div>
+      <div class="input-group">
+        <label for="edadMeses">&nbsp;</label>
+        <div class="input-wrap">
+          <input type="number" id="edadMeses" step="1" min="0" max="11" inputmode="numeric" placeholder="meses">
+          <span class="unit">meses</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider-line"></div>
+
+    <label class="factor-toggle">
+      <span class="text">
+        <strong>Inestabilidad hemodinámica o comorbilidad relevante</strong>
+        <small>Shock, cardiopatía, nefropatía, sepsis, alteración del nivel de conciencia, etc.</small>
+      </span>
+      <span class="switch">
+        <input type="checkbox" id="comorbilidad">
+        <span class="slider"></span>
+      </span>
+    </label>
+  </section>
+
+  <section class="card">
+    <h2 class="card-title">
+      Escala de Gorelick
+      <span class="score-pill">Puntos: <span id="gorelikScore">0</span>/10</span>
+    </h2>
+    <div class="gorelik-list" id="gorelikList"></div>
+  </section>
+
+  <div class="action-row">
+    <button class="btn-calc" id="btnCalc" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+        <line x1="8" y1="6" x2="16" y2="6"></line>
+        <line x1="8" y1="11" x2="10" y2="11"></line>
+        <line x1="13" y1="11" x2="16" y2="11"></line>
+        <line x1="8" y1="15" x2="10" y2="15"></line>
+        <line x1="13" y1="15" x2="16" y2="15"></line>
+        <line x1="8" y1="19" x2="10" y2="19"></line>
+        <line x1="13" y1="19" x2="16" y2="19"></line>
+      </svg>
+      Calcular pauta
+    </button>
+    <button class="btn-clear" id="btnReset" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+        <path d="M10 11v6M14 11v6"></path>
+      </svg>
+      Limpiar
+    </button>
+  </div>
+
+  <section id="results" class="hidden"></section>
+  <section id="alternative" class="hidden"></section>
+  <section id="pasteArea" class="hidden"></section>
+
+  <p class="footer-note">
+    Basada en <strong>SEUP 2024</strong> y el Documento GRADE de la SEUP (Mora-Capín et al., An Pediatr 2022).<br>
+    Herramienta de apoyo a la decisión clínica. Verificar siempre con criterio médico y guías locales.
+  </p>
+
+</div>
+
+<div class="toast" id="toast">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="20 6 9 17 4 12"></polyline>
+  </svg>
+  <span id="toastText">Copiado al portapapeles</span>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  var GORELIK_ITEMS = [
+    "Elasticidad cutánea disminuida",
+    "Tiempo relleno capilar > 2 s",
+    "Respiración anormal",
+    "Taquicardia (> 150 lpm)",
+    "Ojos hundidos",
+    "Deterioro del estado general",
+    "Ausencia de lágrimas",
+    "Sequedad de mucosas",
+    "Pulso radial débil/anormal",
+    "Diuresis disminuida"
+  ];
+
+  var lastReportText = '';
+
+  var listEl = document.getElementById('gorelikList');
+  for (var i = 0; i < GORELIK_ITEMS.length; i++) {
+    var row = document.createElement('label');
+    row.className = 'toggle-row';
+    row.innerHTML =
+      '<span class="toggle-label">' +
+        '<span class="toggle-num">' + (i+1) + '</span>' + GORELIK_ITEMS[i] +
+      '</span>' +
+      '<span class="switch">' +
+        '<input type="checkbox" class="g-toggle" data-idx="' + i + '">' +
+        '<span class="slider"></span>' +
+      '</span>';
+    listEl.appendChild(row);
+  }
+
+  var scoreEl = document.getElementById('gorelikScore');
+  var toggles = document.querySelectorAll('.g-toggle');
+  for (var k = 0; k < toggles.length; k++) {
+    toggles[k].addEventListener('change', updateScore);
+  }
+
+  function getScore(){
+    var s = 0;
+    for (var i = 0; i < toggles.length; i++) {
+      if (toggles[i].checked) s++;
+    }
+    return s;
+  }
+  function updateScore(){ scoreEl.textContent = getScore(); }
+  function getActiveSigns(){
+    var signs = [];
+    for (var i = 0; i < toggles.length; i++) {
+      if (toggles[i].checked) signs.push(GORELIK_ITEMS[i]);
+    }
+    return signs;
+  }
+  function holliday(weight){
+    if (weight <= 10) return weight * 100;
+    if (weight <= 20) return 1000 + (weight - 10) * 50;
+    return 1500 + (weight - 20) * 20;
+  }
+  function deficitInfo(score){
+    if (score === 0) return { pct: 0, label: 'Sin deshidratación' };
+    if (score <= 2)  return { pct: 4, label: 'Deshidratación leve' };
+    if (score <= 5)  return { pct: 7, label: 'Deshidratación moderada' };
+    return { pct: 10, label: 'Deshidratación grave' };
+  }
+  function sodiumType(na){
+    if (na < 130) return { key: 'hipo',  label: 'hiponatrémica' };
+    if (na <= 150) return { key: 'iso',  label: 'isonatrémica' };
+    return { key: 'hiper', label: 'hipernatrémica' };
+  }
+  function fmt(n, dec){
+    if (!isFinite(n)) return '-';
+    var d = (dec === undefined || dec === null) ? 0 : dec;
+    return Number(n.toFixed(d)).toLocaleString('es-ES', {
+      minimumFractionDigits: d,
+      maximumFractionDigits: d
+    });
+  }
+  function determineStrategy(score, sNa, ageMonths, comorbilidad){
+    if (score === 0) {
+      return { key: 'basal', label: 'Solo necesidades basales' };
+    }
+    var less3m = ageMonths !== null && ageMonths < 3;
+    var naAltered = sNa.key === 'hipo' || sNa.key === 'hiper';
+    var RIRcontra = less3m || naAltered || comorbilidad;
+    if (RIRcontra) {
+      var reason = less3m ? 'edad < 3 meses'
+                 : comorbilidad ? 'comorbilidad o inestabilidad hemodinámica'
+                 : 'natremia alterada (manejo individualizado)';
+      return { key: 'clasica', label: 'Rehidratación intravenosa clásica', reason: reason };
+    }
+    if (score <= 5) {
+      return { key: 'rho', label: 'Rehidratación oral (1ª elección)' };
+    }
+    return { key: 'rir', label: 'Rehidratación IV rápida (RIR)' };
+  }
+
+  function buildReportText(d){
+    var sep = '----------------------------------------------';
+    var fecha = new Date().toLocaleDateString('es-ES', {
+      day: '2-digit', month: '2-digit', year: 'numeric',
+      hour: '2-digit', minute: '2-digit'
+    });
+    var txt = '';
+    txt += 'HIDRATACIÓN INTRAVENOSA PEDIÁTRICA\n';
+    txt += sep + '\n';
+    txt += 'Fecha: ' + fecha + '\n\n';
+
+    txt += 'DATOS DEL PACIENTE\n';
+    txt += '  - Peso: ' + fmt(d.peso, d.peso % 1 ? 1 : 0) + ' kg\n';
+    if (d.edadStr) txt += '  - Edad: ' + d.edadStr + '\n';
+    txt += '  - Sodio sérico (Na+): ' + fmt(d.na, 0) + ' mEq/L\n';
+    if (d.comorbilidad) txt += '  - Inestabilidad hemodinámica o comorbilidad relevante: SÍ\n';
+    txt += '\n';
+
+    txt += 'VALORACIÓN CLÍNICA (Escala de Gorelick)\n';
+    txt += '  - Puntuación: ' + d.score + '/10 -> ' + d.severity + '\n';
+    if (d.signs.length > 0) {
+      txt += '  - Signos presentes:\n';
+      for (var i = 0; i < d.signs.length; i++) {
+        txt += '      * ' + d.signs[i] + '\n';
+      }
+    } else {
+      txt += '  - Sin signos clínicos de deshidratación.\n';
+    }
+    txt += '\n';
+
+    txt += 'DIAGNÓSTICO\n';
+    txt += '  ' + d.diagnostico + '\n\n';
+
+    if (d.score > 0) {
+      txt += 'CÁLCULO DE FLUIDOS\n';
+      txt += '  - Necesidades basales (Holliday-Segar): ' + fmt(d.basal, 0) + ' ml/24 h\n';
+      txt += '  - Pérdidas estimadas (' + d.defPct + '%): ' + fmt(d.perdidas, 0) + ' ml\n\n';
+    }
+
+    txt += 'ESTRATEGIA RECOMENDADA: ' + d.strategy.label.toUpperCase() + '\n';
+    if (d.strategy.reason) txt += '  Motivo: ' + d.strategy.reason + '\n';
+    txt += '\n';
+
+    txt += 'PAUTA DE TRATAMIENTO\n';
+    for (var j = 0; j < d.planLines.length; j++) {
+      txt += '  ' + d.planLines[j] + '\n';
+    }
+
+    if (d.alternativaText) {
+      txt += '\nALTERNATIVA / SECUENCIA POSTERIOR\n';
+      txt += '  ' + d.alternativaText + '\n';
+    }
+
+    if (d.observaciones && d.observaciones.length) {
+      txt += '\nOBSERVACIONES Y MONITORIZACIÓN\n';
+      for (var m = 0; m < d.observaciones.length; m++) {
+        txt += '  ! ' + d.observaciones[m] + '\n';
+      }
+    }
+
+    txt += '\n' + sep + '\n';
+    return txt;
+  }
+
+  function calcular(){
+    var pesoStr = document.getElementById('peso').value.replace(',', '.');
+    var naStr = document.getElementById('sodio').value.replace(',', '.');
+    var peso = parseFloat(pesoStr);
+    var na = parseFloat(naStr);
+    var edadAnos  = document.getElementById('edadAnos').value;
+    var edadMeses = document.getElementById('edadMeses').value;
+    edadAnos = edadAnos ? edadAnos.toString().replace(/\s+/g, '') : '';
+    edadMeses = edadMeses ? edadMeses.toString().replace(/\s+/g, '') : '';
+    var comorbilidad = document.getElementById('comorbilidad').checked;
+    var resEl = document.getElementById('results');
+    var altEl = document.getElementById('alternative');
+    var pasteEl = document.getElementById('pasteArea');
+
+    if (!peso || peso <= 0) {
+      alert('Introduce un peso válido en kg.');
+      document.getElementById('peso').focus();
+      return;
+    }
+    if (!na || na <= 0) {
+      alert('Introduce un valor válido de sodio sérico (mEq/L).');
+      document.getElementById('sodio').focus();
+      return;
+    }
+
+    var ageMonths = null, edadStr = '';
+    var yrs = edadAnos !== '' ? parseInt(edadAnos, 10) : null;
+    var mns = edadMeses !== '' ? parseInt(edadMeses, 10) : null;
+    if (yrs !== null || mns !== null) {
+      ageMonths = (yrs || 0) * 12 + (mns || 0);
+      if (yrs && mns) edadStr = yrs + ' año' + (yrs !== 1 ? 's' : '') + ' y ' + mns + ' mes' + (mns !== 1 ? 'es' : '');
+      else if (yrs) edadStr = yrs + ' año' + (yrs !== 1 ? 's' : '');
+      else edadStr = mns + ' mes' + (mns !== 1 ? 'es' : '');
+    }
+
+    var score = getScore();
+    var signs = getActiveSigns();
+    var dInfo = deficitInfo(score);
+    var defPct = dInfo.pct;
+    var severity = dInfo.label;
+    var sNa = sodiumType(na);
+
+    var basal = holliday(peso);
+    var perdidas = peso * defPct * 10;
+
+    var diagnostico;
+    if (score === 0) {
+      diagnostico = 'Sin signos clínicos de deshidratación (Na+ ' + fmt(na, 0) + ' mEq/L, ' + sNa.label + ')';
+    } else {
+      var sevShort = score <= 2 ? 'leve' : (score <= 5 ? 'moderada' : 'grave');
+      diagnostico = 'Deshidratación ' + sNa.label + ' ' + sevShort + ' (aprox. ' + defPct + '%)';
+    }
+
+    var strategy = determineStrategy(score, sNa, ageMonths, comorbilidad);
+
+    var observaciones = [];
+    var planHTML = '';
+    var planLines = [];
+    var alternativaHTML = '';
+    var alternativaText = '';
+
+    if (strategy.key === 'basal') {
+      var ritmoBasal = basal / 24;
+      planHTML =
+        '<div class="strategy-block">' +
+          '<div class="strategy-eyebrow">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>' +
+            'Estrategia recomendada' +
+          '</div>' +
+          '<div class="strategy-title">Solo necesidades basales</div>' +
+          '<div class="strategy-sub">El paciente no presenta signos clínicos de deshidratación. Mantener aporte basal hasta tolerancia oral completa.</div>' +
+          '<div class="plan-grid">' +
+            '<div class="plan-cell"><div class="lbl">Volumen / 24 h</div><div class="val">' + fmt(basal, 0) + ' <span class="u">ml</span></div><div class="sub">Holliday-Segar</div></div>' +
+            '<div class="plan-cell"><div class="lbl">Ritmo IV</div><div class="val">' + fmt(ritmoBasal, 1) + ' <span class="u">ml/h</span></div><div class="sub">Si no tolera vía oral</div></div>' +
+          '</div>' +
+          '<div class="suero-line"><strong>Suero:</strong> SS 0,9% + glucosa 5% + KCl 20 mEq/L (si diuresis y K+ normales).</div>' +
+        '</div>';
+      planLines.push('- Volumen 24 h: ' + fmt(basal, 0) + ' ml');
+      planLines.push('- Ritmo IV (si precisa): ' + fmt(ritmoBasal, 1) + ' ml/h');
+      planLines.push('- Suero: SS 0,9% + glucosa 5% + KCl 20 mEq/L (si diuresis y K+ normales).');
+      observaciones.push('Priorizar vía oral / lactancia materna. Reintroducción precoz de la alimentación.');
+    }
+    else if (strategy.key === 'rho') {
+      var volMin = peso * (score <= 2 ? 30 : 50);
+      var volMax = peso * (score <= 2 ? 50 : 90);
+      var volTarget = perdidas;
+
+      planHTML =
+        '<div class="strategy-block">' +
+          '<div class="strategy-eyebrow">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.5C9 7 6 11 6 15a6 6 0 0 0 12 0c0-4-3-8-6-12.5z"></path></svg>' +
+            'Estrategia recomendada' +
+          '</div>' +
+          '<div class="strategy-title">Rehidratación oral (RHO)</div>' +
+          '<div class="strategy-sub">1ª elección en deshidratación ' + (score <= 2 ? 'leve' : 'moderada') + ' sin contraindicaciones (más fisiológica y segura que la vía IV).</div>' +
+          '<div class="plan-grid">' +
+            '<div class="plan-cell"><div class="lbl">Volumen SRO</div><div class="val">' + fmt(volTarget, 0) + ' <span class="u">ml</span></div><div class="sub">Rango: ' + fmt(volMin, 0) + '-' + fmt(volMax, 0) + ' ml (' + (score <= 2 ? '30-50' : '50-90') + ' ml/kg)</div></div>' +
+            '<div class="plan-cell"><div class="lbl">Tiempo</div><div class="val">4 <span class="u">h</span></div><div class="sub">Fase de rehidratación</div></div>' +
+            '<div class="plan-cell full"><div class="lbl">Técnica</div><div class="sub" style="font-size:0.85rem; color:var(--text); font-weight:500; margin-top:2px;">Inicialmente <strong>5 ml cada 2-5 min</strong> con jeringa; aumentar frecuencia/cantidad según tolerancia. Mantenimiento: 5-10 ml/kg por deposición + 2-5 ml/kg por vómito.</div></div>' +
+          '</div>' +
+          '<div class="suero-line"><strong>SRO hiposódica</strong> (Na+ 60 mEq/L, osmolaridad 200-250 mOsm/L; ESPGHAN).</div>' +
+        '</div>';
+
+      planLines.push('- Volumen SRO: ' + fmt(volTarget, 0) + ' ml (rango ' + fmt(volMin, 0) + '-' + fmt(volMax, 0) + ' ml)');
+      planLines.push('- Tiempo: 4 horas (fase de rehidratación)');
+      planLines.push('- Técnica: inicialmente 5 ml cada 2-5 min con jeringa; aumentar según tolerancia.');
+      planLines.push('- Solución: SRO hiposódica (Na+ 60 mEq/L, ESPGHAN).');
+      planLines.push('- Mantenimiento: 5-10 ml/kg por deposición + 2-5 ml/kg por vómito.');
+
+      observaciones.push('Si vómitos persistentes: ondansetrón 0,15 mg/kg VO (máx. 6-8 mg) y reintentar tolerancia a los 20 min. Precaución si riesgo de QT largo.');
+      observaciones.push('Considerar SNG como alternativa antes de la vía IV.');
+      observaciones.push('No interrumpir la lactancia materna. Reintroducción precoz de la alimentación.');
+
+      var ritmoRIR_a = Math.min(peso * 20, 700);
+      var tiempoRIR_a = score <= 2 ? '1-2' : '2-3';
+      alternativaHTML =
+        '<div class="alt-card animate-in">' +
+          '<h3>Si fracaso de la RHO o contraindicación</h3>' +
+          '<div class="alt-name">-> Rehidratación IV rápida (RIR)</div>' +
+          '<div class="alt-detail"><strong>' + fmt(ritmoRIR_a, 1) + ' ml/h</strong> (20 ml/kg/h, máx. 700 ml/h) durante <strong>' + tiempoRIR_a + ' h</strong>. Suero: SS 0,9% +/- glucosa 2,5% (si cetosis). Reevaluación clínica horaria.</div>' +
+        '</div>';
+      alternativaText = 'Si fracaso/contraindicación de RHO -> RIR a ' + fmt(ritmoRIR_a, 1) + ' ml/h (20 ml/kg/h) durante ' + tiempoRIR_a + ' h con SS 0,9% +/- glucosa 2,5%.';
+    }
+    else if (strategy.key === 'rir') {
+      var ritmoRIR = Math.min(peso * 20, 700);
+      var horasRIR = score >= 6 ? '3-4' : '2-3';
+      var volTotalRIR = perdidas;
+
+      planHTML =
+        '<div class="strategy-block">' +
+          '<div class="strategy-eyebrow">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>' +
+            'Estrategia recomendada' +
+          '</div>' +
+          '<div class="strategy-title">Rehidratación IV rápida (RIR)</div>' +
+          '<div class="strategy-sub">Tratamiento de elección en deshidratación grave secundaria a GEA (SEUP 2024 - GRADE 2022). Eficaz, segura y acorta la estancia.</div>' +
+          '<div class="plan-grid">' +
+            '<div class="plan-cell"><div class="lbl">Ritmo de infusión</div><div class="val">' + fmt(ritmoRIR, 1) + ' <span class="u">ml/h</span></div><div class="sub">20 ml/kg/h, máx 700 ml/h</div></div>' +
+            '<div class="plan-cell"><div class="lbl">Tiempo</div><div class="val">' + horasRIR + ' <span class="u">h</span></div><div class="sub">Según evolución clínica</div></div>' +
+            '<div class="plan-cell full"><div class="lbl">Volumen estimado del déficit</div><div class="val">' + fmt(volTotalRIR, 0) + ' <span class="u">ml</span></div><div class="sub">No superar el déficit calculado, reevaluación horaria</div></div>' +
+          '</div>' +
+          '<div class="suero-line"><strong>Suero:</strong> SS 0,9% (alt.: Ringer Lactato / sol. balanceada) <strong>+/- glucosa 2,5%</strong> si glucemia normal con cetosis.</div>' +
+        '</div>';
+
+      planLines.push('- Ritmo: ' + fmt(ritmoRIR, 1) + ' ml/h (20 ml/kg/h; máx. 700 ml/h)');
+      planLines.push('- Tiempo: ' + horasRIR + ' horas según evolución clínica');
+      planLines.push('- Volumen estimado a reponer (déficit): ' + fmt(volTotalRIR, 0) + ' ml');
+      planLines.push('- Suero: SS 0,9% (alt.: Ringer Lactato o sol. balanceada) +/- glucosa 2,5% si cetosis con glucemia normal.');
+      planLines.push('- Si glucemia > 140 mg/dL: SS 0,9% SIN glucosa.');
+
+      observaciones.push('Reevaluación clínica HORARIA: FC, TA, FR, grado de hidratación, balance hídrico y signos de sobrecarga de volumen.');
+      observaciones.push('Tras la RIR, si mejoría clínica y tolerancia oral: completar con RHO + reposición de pérdidas mantenidas.');
+      observaciones.push('Si persisten pérdidas elevadas o fracaso de la tolerancia oral: continuar con fluidoterapia clásica (basales + déficit residual).');
+      observaciones.push('Solicitar cetonemia si está disponible para decidir composición del suero.');
+
+      var volClasica = basal + perdidas;
+      var ritmoClasica_alt = volClasica / 24;
+      alternativaHTML =
+        '<div class="alt-card animate-in">' +
+          '<h3>Fase de mantenimiento (si no tolera vía oral)</h3>' +
+          '<div class="alt-name">-> Fluidoterapia IV clásica</div>' +
+          '<div class="alt-detail">Volumen total = basales (' + fmt(basal, 0) + ' ml) + déficit residual. Ritmo orientativo si se repone todo en 24 h: <strong>' + fmt(ritmoClasica_alt, 1) + ' ml/h</strong>. Suero: SS 0,9% + glucosa 5% + KCl 20 mEq/L (tras comprobar diuresis y K+).</div>' +
+        '</div>';
+      alternativaText = 'Tras RIR, si no tolera vía oral -> IV clásica: volumen 24 h = ' + fmt(volClasica, 0) + ' ml; ritmo ' + fmt(ritmoClasica_alt, 1) + ' ml/h. Suero: SS 0,9% + glucosa 5% + KCl 20 mEq/L.';
+    }
+    else if (strategy.key === 'clasica') {
+      var volumenDiario, volumenTotal, ritmo, duracion = 24, planLabel, planSub;
+      if (sNa.key === 'hiper') {
+        volumenDiario = basal + (perdidas / 2);
+        volumenTotal = volumenDiario * 2;
+        ritmo = volumenDiario / 24;
+        duracion = 48;
+        planLabel = 'Reposición en 48 h';
+        planSub = 'Basales + 1/2 pérdidas cada 24 h (mismo volumen los 2 días)';
+        observaciones.push('Corregir Na+ lentamente: descenso <= 0,5 mEq/L/h (máx. 10-12 mEq/L/24 h) para evitar edema cerebral.');
+        observaciones.push('Solicitar control de natremia (Na+) cada 4-6 horas y ajustar la pauta según evolución.');
+      } else {
+        volumenDiario = basal + perdidas;
+        volumenTotal = volumenDiario;
+        ritmo = volumenDiario / 24;
+        planLabel = 'Reposición en 24 h';
+        planSub = 'Necesidades basales + pérdidas estimadas';
+        if (sNa.key === 'hipo') {
+          observaciones.push('Hiponatrémica: si Na+ < 125 mEq/L o sintomática, valorar corrección con SSH al 3%.');
+          observaciones.push('Solicitar control de natremia (Na+) cada 4-6 horas durante la reposición.');
+          observaciones.push('Reponer de forma más lenta cuanto mayor sea la alteración electrolítica y más insidiosa su instauración.');
+        }
+      }
+
+      var extra48 = '';
+      if (duracion === 48) {
+        extra48 = '<div class="plan-cell full"><div class="lbl">Volumen total en 48 h</div><div class="val">' + fmt(volumenTotal, 0) + ' <span class="u">ml</span></div><div class="sub">Reposición lenta, vigilar descenso de Na+</div></div>';
+      }
+
+      planHTML =
+        '<div class="strategy-block">' +
+          '<div class="strategy-eyebrow">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 L4 6 v6 c0 5 3.5 9 8 10 4.5-1 8-5 8-10 V6 L12 2 z"></path></svg>' +
+            'Estrategia recomendada' +
+          '</div>' +
+          '<div class="strategy-title">Rehidratación IV clásica</div>' +
+          '<div class="strategy-sub">Manejo individualizado por: <strong>' + strategy.reason + '</strong>.</div>' +
+          '<div class="plan-grid">' +
+            '<div class="plan-cell"><div class="lbl">Volumen / 24 h</div><div class="val">' + fmt(volumenDiario, 0) + ' <span class="u">ml</span></div><div class="sub">' + planSub + '</div></div>' +
+            '<div class="plan-cell"><div class="lbl">Ritmo</div><div class="val">' + fmt(ritmo, 1) + ' <span class="u">ml/h</span></div><div class="sub">' + planLabel + '</div></div>' +
+            extra48 +
+          '</div>' +
+          '<div class="suero-line"><strong>Suero:</strong> SS 0,9% + glucosa 5% + KCl 20 mEq/L (tras confirmar diuresis y K+ normal). Ajustar según natremia evolutiva.</div>' +
+        '</div>';
+
+      planLines.push('- ' + planLabel + ': ' + planSub);
+      planLines.push('- Volumen por día: ' + fmt(volumenDiario, 0) + ' ml/24 h');
+      if (duracion === 48) planLines.push('- Volumen total en 48 h: ' + fmt(volumenTotal, 0) + ' ml');
+      planLines.push('- Ritmo: ' + fmt(ritmo, 1) + ' ml/h');
+      planLines.push('- Suero: SS 0,9% + glucosa 5% + KCl 20 mEq/L (verificar diuresis y K+).');
+
+      if (comorbilidad) {
+        var bolus = peso * 10;
+        observaciones.unshift('Si signos de shock o inestabilidad: bolos de 10 ml/kg (aprox. ' + fmt(bolus, 0) + ' ml) de SS 0,9% o solución balanceada, reevaluando tras cada carga (máx. 3 bolos).');
+      }
+      observaciones.push('Control de iones, función renal y gasometría si > 24 h de sueroterapia IV.');
+      observaciones.push('Vigilar peso, diuresis, FC, TA y signos de sobrecarga de volumen.');
+    }
+
+    if (score > 0) {
+      observaciones.push('Si acidosis metabólica grave (pH < 7,15-7,20, EB < -12 o HCO3- < 10-12 mEq/L): valorar HCO3- 1/6 M -> déficit = [HCO3- deseado - actual] x peso x 0,5; administrar 1/3 a 1/2 en 1-2 h.');
+    }
+
+    var html =
+      '<div class="result-card animate-in">' +
+        '<div class="result-diagnosis">Diagnóstico</div>' +
+        '<span class="severity-badge">' + severity + (defPct ? ' - ' + defPct + '%' : '') + '</span>' +
+        '<div class="result-diagnosis-text">' + diagnostico + '</div>' +
+        '<div class="result-divider"></div>' +
+        '<div class="result-row"><span class="label">Puntuación Gorelick</span><span class="value">' + score + ' / 10</span></div>' +
+        '<div class="result-row"><span class="label">Necesidades basales</span><span class="value">' + fmt(basal, 0) + ' ml/24h</span></div>' +
+        '<div class="result-row"><span class="label">Pérdidas estimadas</span><span class="value">' + fmt(perdidas, 0) + ' ml' + (defPct ? ' (' + defPct + '%)' : '') + '</span></div>' +
+        '<div class="result-row"><span class="label">Sodio sérico</span><span class="value">' + fmt(na, 0) + ' mEq/L</span></div>' +
+        planHTML +
+        '<button class="btn-copy" id="btnCopy" type="button">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">' +
+            '<rect x="9" y="9" width="13" height="13" rx="2"></rect>' +
+            '<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>' +
+          '</svg>' +
+          '<span id="btnCopyText">Copiar diagnóstico y tratamiento</span>' +
+        '</button>' +
+      '</div>';
+
+    resEl.innerHTML = html;
+    resEl.className = '';
+
+    if (alternativaHTML) {
+      altEl.innerHTML = alternativaHTML;
+      altEl.className = '';
+    } else {
+      altEl.className = 'hidden';
+      altEl.innerHTML = '';
+    }
+
+    if (observaciones.length) {
+      var obsList = '';
+      for (var p = 0; p < observaciones.length; p++) {
+        obsList += '<li>' + observaciones[p] + '</li>';
+      }
+      var obsHTML = '<div class="alert animate-in" style="margin-top:14px; background: rgba(255,251,235,0.97); color: #78350f; border-color: #d97706;"><strong>Observaciones y monitorización</strong><ul>' + obsList + '</ul></div>';
+      var resCard = resEl.querySelector('.result-card');
+      if (resCard) resCard.insertAdjacentHTML('beforeend', obsHTML);
+    }
+
+    lastReportText = buildReportText({
+      peso: peso, na: na, edadStr: edadStr, comorbilidad: comorbilidad,
+      score: score, signs: signs, defPct: defPct, severity: severity,
+      diagnostico: diagnostico, basal: basal, perdidas: perdidas,
+      strategy: strategy, planLines: planLines,
+      alternativaText: alternativaText, observaciones: observaciones
+    });
+
+    pasteEl.innerHTML =
+      '<div class="paste-card animate-in">' +
+        '<div class="paste-header">' +
+          '<h3>Texto para informe</h3>' +
+          '<button class="btn-recopy" id="btnReCopy" type="button">' +
+            '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' +
+              '<rect x="9" y="9" width="13" height="13" rx="2"></rect>' +
+              '<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>' +
+            '</svg>' +
+            '<span>Copiar</span>' +
+          '</button>' +
+        '</div>' +
+        '<textarea class="paste-textarea" id="reportText" spellcheck="false">' + lastReportText.replace(/</g, '&lt;') + '</textarea>' +
+        '<p class="paste-hint">Pulsa <strong>Copiar</strong> o selecciona el texto para llevarlo a tu informe. Puedes editarlo antes de copiarlo.</p>' +
+      '</div>';
+    pasteEl.className = '';
+
+    document.getElementById('btnCopy').addEventListener('click', function(){ copyReport('btnCopy'); });
+    document.getElementById('btnReCopy').addEventListener('click', function(){ copyReport('btnReCopy'); });
+
+    setTimeout(function(){
+      resEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+
+  function showToast(msg, ok){
+    var t = document.getElementById('toast');
+    document.getElementById('toastText').textContent = msg;
+    t.style.background = ok ? 'var(--text)' : 'var(--danger)';
+    t.className = 'toast show';
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function(){ t.className = 'toast'; }, 2200);
+  }
+
+  function setCopiedFeedback(btnId){
+    var btn = document.getElementById(btnId);
+    if (!btn) return;
+    btn.className = btn.className + ' copied';
+    if (btnId === 'btnCopy') {
+      document.getElementById('btnCopyText').textContent = '¡Copiado!';
+    } else {
+      var span = btn.querySelector('span');
+      if (span) span.textContent = 'Copiado';
+    }
+    setTimeout(function(){
+      btn.className = btn.className.replace(' copied', '');
+      if (btnId === 'btnCopy') {
+        document.getElementById('btnCopyText').textContent = 'Copiar diagnóstico y tratamiento';
+      } else {
+        var span2 = btn.querySelector('span');
+        if (span2) span2.textContent = 'Copiar';
+      }
+    }, 2000);
+  }
+
+  function copyReport(btnId){
+    var ta = document.getElementById('reportText');
+    var text = ta ? ta.value : lastReportText;
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(function(){
+          setCopiedFeedback(btnId);
+          showToast('Copiado al portapapeles', true);
+        }, function(){
+          fallbackCopy(ta, btnId);
+        });
+      } else {
+        fallbackCopy(ta, btnId);
+      }
+    } catch (e) {
+      showToast('No se pudo copiar. Selecciona el texto.', false);
+    }
+  }
+
+  function fallbackCopy(ta, btnId){
+    if (!ta) { showToast('No se pudo copiar. Selecciona el texto.', false); return; }
+    ta.focus(); ta.select(); ta.setSelectionRange(0, 99999);
+    try {
+      var ok = document.execCommand('copy');
+      if (window.getSelection) window.getSelection().removeAllRanges();
+      if (ok) { setCopiedFeedback(btnId); showToast('Copiado al portapapeles', true); }
+      else { showToast('Selecciona y copia manualmente', false); }
+    } catch (e) {
+      showToast('Selecciona y copia manualmente', false);
+    }
+  }
+
+  function reset(){
+    document.getElementById('peso').value = '';
+    document.getElementById('sodio').value = '';
+    document.getElementById('edadAnos').value = '';
+    document.getElementById('edadMeses').value = '';
+    document.getElementById('comorbilidad').checked = false;
+    for (var i = 0; i < toggles.length; i++) toggles[i].checked = false;
+    updateScore();
+    document.getElementById('results').className = 'hidden';
+    document.getElementById('results').innerHTML = '';
+    document.getElementById('alternative').className = 'hidden';
+    document.getElementById('alternative').innerHTML = '';
+    document.getElementById('pasteArea').className = 'hidden';
+    document.getElementById('pasteArea').innerHTML = '';
+    lastReportText = '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.getElementById('btnCalc').addEventListener('click', calcular);
+  document.getElementById('btnReset').addEventListener('click', reset);
+
+  document.addEventListener('dblclick', function(e){
+    if (e.target.closest && e.target.closest('button, .toggle-row, .switch, .factor-toggle')) {
+      e.preventDefault();
+    }
+  }, false);
+
+})();
+</script>
+<script>
+  // === Registro del Service Worker (PWA offline + actualizaciones) ===
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('./sw.js').then(function(reg) {
+        reg.addEventListener('updatefound', function() {
+          var nw = reg.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function() {
+            if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+              showUpdateBanner(reg);
+            }
+          });
+        });
+      }).catch(function(){});
+      var refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', function() {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
+      });
+    });
+    function showUpdateBanner(reg) {
+      var b = document.createElement('div');
+      b.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0f766e;color:#fff;padding:12px 18px;border-radius:24px;font:600 0.88rem -apple-system,BlinkMacSystemFont,"SF Pro Display",sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);z-index:9999;display:flex;gap:12px;align-items:center;max-width:calc(100vw - 32px);';
+      b.innerHTML = '<span>Nueva versión disponible</span><button style="background:#ccfbf1;color:#0f766e;border:none;border-radius:14px;padding:6px 12px;font:700 0.82rem inherit;cursor:pointer;-webkit-appearance:none;appearance:none;">Actualizar</button>';
+      b.querySelector('button').onclick = function() {
+        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        b.remove();
+      };
+      document.body.appendChild(b);
+    }
+  }
+</script>
+</body>
+</html>
