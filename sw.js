@@ -9,7 +9,7 @@
  * el banner "Nueva versión disponible" en la app.
  */
 
-const CACHE_VERSION = 'v1.0.0';
+const CACHE_VERSION = 'v1.0.1';
 const CACHE_NAME = 'hidrativ-' + CACHE_VERSION;
 
 const PRECACHE_URLS = [
