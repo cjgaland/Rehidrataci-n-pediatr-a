@@ -759,9 +759,34 @@
     border-color: var(--obsv-border);
   }
 
+  /* ── Grupo de botones de cabecera (info + tema) ── */
+  .hero-actions {
+    margin-left: auto;
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+  }
+
+  /* ── Botón circular info "i" ── */
+  .btn-info {
+    flex-shrink: 0;
+    width: 38px; height: 38px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text-muted);
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+    -webkit-appearance: none; appearance: none;
+    font-family: inherit;
+  }
+  .btn-info:active {
+    background: var(--surface-alt);
+    -webkit-transform: scale(0.94); transform: scale(0.94);
+  }
+  .btn-info svg { width: 18px; height: 18px; pointer-events: none; }
+
   /* ── Botón toggle tema ── */
   .btn-theme {
-    margin-left: auto;
     flex-shrink: 0;
     width: 38px; height: 38px;
     background: var(--surface);
@@ -788,6 +813,133 @@
     html:not(.light) .icon-sun { display: block; }
     html:not(.light) .icon-moon { display: none; }
   }
+
+  /* ── Modal "Acerca de" ── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: flex; align-items: flex-end; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: auto; }
+  .modal {
+    background: var(--card);
+    border-radius: 24px 24px 0 0;
+    width: 100%; max-width: 520px;
+    max-height: 92dvh; max-height: 92vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-transform: translateY(24px);
+    transform: translateY(24px);
+    transition: -webkit-transform 0.3s cubic-bezier(0.34,1.2,0.64,1), transform 0.3s cubic-bezier(0.34,1.2,0.64,1);
+    overscroll-behavior: contain;
+  }
+  .modal-overlay.open .modal { -webkit-transform: translateY(0); transform: translateY(0); }
+  .modal-drag {
+    width: 40px; height: 4px;
+    background: var(--border); border-radius: 2px;
+    margin: 12px auto 0;
+  }
+  .modal-header {
+    position: -webkit-sticky; position: sticky; top: 0;
+    background: var(--card);
+    padding: 16px 20px 14px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    z-index: 1;
+  }
+  .modal-titulo {
+    font-size: 1rem; font-weight: 700;
+    color: var(--text); margin: 0;
+  }
+  .modal-cerrar {
+    width: 32px; height: 32px;
+    background: var(--surface); border: none; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: var(--text-muted);
+    -webkit-appearance: none; appearance: none;
+    font-family: inherit; flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .modal-cerrar:active { background: var(--surface-alt); }
+  .modal-cerrar svg { width: 16px; height: 16px; pointer-events: none; }
+  .modal-body {
+    padding: 20px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .modal-bloque { display: flex; flex-direction: column; gap: 8px; }
+  .modal-bloque-titulo {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 0.75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--primary-dark);
+  }
+  .modal-bloque-titulo svg { flex-shrink: 0; }
+  .modal-bloque p {
+    font-size: 0.88rem; line-height: 1.55;
+    color: var(--text); margin: 0;
+  }
+  .modal-bloque--aviso {
+    background: var(--obsv-bg);
+    border: 1px solid var(--obsv-border);
+    border-radius: 12px; padding: 14px;
+  }
+  .modal-bloque--aviso .modal-bloque-titulo { color: var(--obsv-text); }
+  .modal-bloque--aviso p { color: var(--obsv-text); }
+  .modal-lista-fuentes {
+    margin: 0; padding: 0; list-style: none;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .modal-lista-fuentes li {
+    font-size: 0.84rem; line-height: 1.5;
+    color: var(--text);
+    padding-left: 12px;
+    border-left: 3px solid var(--primary-light);
+  }
+  .modal-fuente-url {
+    display: block;
+    font-size: 0.74rem; color: var(--accent);
+    word-break: break-all; margin-top: 2px;
+  }
+  .btn-descargar-manual {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--primary-light); color: var(--primary-dark);
+    border: none; border-radius: 12px;
+    padding: 10px 16px;
+    font-size: 0.88rem; font-weight: 700;
+    text-decoration: none; cursor: pointer;
+    -webkit-appearance: none; appearance: none;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+    align-self: flex-start;
+  }
+  .btn-descargar-manual:active { background: var(--primary); color: #fff; }
+  .btn-descargar-manual svg { width: 15px; height: 15px; pointer-events: none; }
+  .modal-nota-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--primary-light); color: var(--primary-dark);
+    padding: 2px 10px; border-radius: 8px;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.04em; width: -webkit-fit-content; width: fit-content;
+    margin-bottom: 4px;
+  }
+  .modal-nota-lista {
+    margin: 0; padding-left: 20px;
+    font-size: 0.84rem; color: var(--text-muted); line-height: 1.55;
+  }
+  .modal-nota-lista li { margin-bottom: 2px; }
+  .modal-meta {
+    text-align: center;
+    font-size: 0.74rem; color: var(--text-muted);
+    padding: 10px 0 4px;
+    border-top: 1px solid var(--border);
+    line-height: 1.6;
+  }
+  .modal-meta strong { color: var(--primary-dark); }
 
   /* ── Banner de actualización SW ── */
   .update-banner {
@@ -840,10 +992,15 @@
         <p>Gorelick &middot; Holliday-Segar &middot; RIR</p>
         <span class="ref-tag">SEUP 2024 &middot; GRADE 2022</span>
       </div>
-      <button class="btn-theme" id="btnTheme" type="button" aria-label="Cambiar tema claro/oscuro">
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-      </button>
+      <div class="hero-actions">
+        <button class="btn-info" id="btnInfo" type="button" aria-label="Acerca de HidratIV">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+        </button>
+        <button class="btn-theme" id="btnTheme" type="button" aria-label="Cambiar tema claro/oscuro">
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -891,6 +1048,17 @@
       </span>
       <span class="switch">
         <input type="checkbox" id="comorbilidad">
+        <span class="slider"></span>
+      </span>
+    </label>
+
+    <label class="factor-toggle">
+      <span class="text">
+        <strong>Intolerancia oral</strong>
+        <small>Vómitos incoercibles, rechazo persistente de la ingesta, alteración del nivel de conciencia, íleo u otra causa que impida la vía oral.</small>
+      </span>
+      <span class="switch">
+        <input type="checkbox" id="intoleranciaOral">
         <span class="slider"></span>
       </span>
     </label>
@@ -982,8 +1150,104 @@
     Basada en <strong>SEUP 2024</strong> y el Documento GRADE de la SEUP (Mora-Capín et al., An Pediatr 2022).<br>
     Herramienta de apoyo a la decisión clínica. Verificar siempre con criterio médico y guías locales.
   </p>
-  <div class="app-autor">HidratIV v1.0.1 · 2026 · por Carlos J. Galán Doval</div>
+  <div class="app-autor">HidratIV v1.0.2 · 2026 · por Carlos J. Galán Doval</div>
 
+</div>
+
+<!-- ── MODAL ACERCA DE ── -->
+<div class="modal-overlay" id="modalInfo" role="dialog" aria-modal="true" aria-labelledby="modalInfoTitulo">
+  <div class="modal" id="modalInfoInner">
+    <div class="modal-drag" aria-hidden="true"></div>
+    <div class="modal-header">
+      <h2 class="modal-titulo" id="modalInfoTitulo">Acerca de HidratIV</h2>
+      <button class="modal-cerrar" id="btnCerrarInfo" type="button" aria-label="Cerrar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <!-- Qué es -->
+      <div class="modal-bloque">
+        <div class="modal-bloque-titulo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <span>Qué es HidratIV</span>
+        </div>
+        <p>Calculadora clínica de pautas de <strong>rehidratación intravenosa pediátrica</strong> para uso a pie de cama en urgencias. Calcula el grado de deshidratación con la escala de Gorelick, las necesidades basales con Holliday-Segar y recomienda la estrategia óptima —RHO, RIR o IV clásica— según las guías <strong>SEUP 2024</strong> y el documento <strong>GRADE 2022</strong>.</p>
+      </div>
+
+      <!-- Manual -->
+      <div class="modal-bloque">
+        <div class="modal-bloque-titulo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <span>Manual de uso</span>
+        </div>
+        <p>Manual completo con instrucciones paso a paso, explicación de la escala Gorelick, fórmulas, estrategias de rehidratación e instalación como app offline.</p>
+        <a href="HidratIV-Manual.pdf" target="_blank" rel="noopener" class="btn-descargar-manual" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+          Descargar manual (PDF)
+        </a>
+      </div>
+
+      <!-- Aviso legal -->
+      <div class="modal-bloque modal-bloque--aviso">
+        <div class="modal-bloque-titulo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          <span>Aviso importante</span>
+        </div>
+        <p>HidratIV es una <strong>herramienta de apoyo al profesional sanitario</strong>, no un sustituto del juicio clínico. Todas las decisiones de prescripción deben ser realizadas y supervisadas por un <strong>médico cualificado</strong> con conocimiento del paciente y su contexto. Los autores no se responsabilizan del uso inadecuado ni de errores derivados de datos desactualizados. La situación clínica individual del paciente puede modificar siempre la pauta adecuada.</p>
+      </div>
+
+      <!-- Fuentes -->
+      <div class="modal-bloque">
+        <div class="modal-bloque-titulo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5.586a1 1 0 0 1 .707.293l5.414 5.414a1 1 0 0 1 .293.707V19a2 2 0 0 1-2 2z"/></svg>
+          <span>Fuentes consultadas</span>
+        </div>
+        <ul class="modal-lista-fuentes">
+          <li>
+            <strong>García Herrero et al. (2024).</strong> Deshidratación en contexto de GEA. SEUP, Protocolos diagnósticos y terapéuticos en urgencias de pediatría, 4.ª ed., Cap. 17. <em>Referencia maestra — lógica principal, sueros e indicaciones.</em>
+            <span class="modal-fuente-url">seup.org/wp-content/uploads/2024/04/17_Deshidratacion_4ed.pdf</span>
+          </li>
+          <li>
+            <strong>Mora-Capín et al. (2022).</strong> Documento de recomendaciones sobre la rehidratación intravenosa rápida en GEA. <em>An Pediatr, 96(6), 523–535.</em> Criterios RIR, documento GRADE.
+            <span class="modal-fuente-url">doi.org/10.1016/j.anpedi.2021.04.017</span>
+          </li>
+          <li>
+            <strong>Manrique-Martínez et al. (2011).</strong> Nuevas pautas de rehidratación en el manejo de la GEA en urgencias. <em>An Pediatr Cont, 9(2), 106–115.</em> Contexto histórico de las nuevas pautas.
+            <span class="modal-fuente-url">doi.org/10.1016/S1696-2818(11)70015-4</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Notas de versión -->
+      <div class="modal-bloque">
+        <div class="modal-bloque-titulo">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span>Notas de versión</span>
+        </div>
+        <div>
+          <div class="modal-nota-tag">v1.0.1 · 2026 · actual</div>
+          <ul class="modal-nota-lista">
+            <li>Versión inicial pública</li>
+            <li>Escala de Gorelick (10 ítems) con cálculo automático de gravedad</li>
+            <li>Holliday-Segar · estrategias RHO / RIR / IV clásica / solo basales</li>
+            <li>Modo claro / oscuro con respeto a preferencia del sistema</li>
+            <li>Sección bibliografía con enlaces a fuentes originales (PDF y DOI)</li>
+            <li>Generador de informe clínico copiable y editable</li>
+            <li>Instalación como PWA — funciona sin conexión</li>
+            <li>Banner automático de nueva versión disponible</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Meta -->
+      <div class="modal-meta">
+        <strong>HidratIV</strong> · v1.0.1 · 2026<br>
+        Diseñada y desarrollada por <strong>Carlos J. Galán Doval</strong>
+      </div>
+
+    </div>
+  </div>
 </div>
 
 <div class="toast" id="toast">
@@ -1072,7 +1336,7 @@
       maximumFractionDigits: d
     });
   }
-  function determineStrategy(score, sNa, ageMonths, comorbilidad){
+  function determineStrategy(score, sNa, ageMonths, comorbilidad, intoleranciaOral){
     if (score === 0) {
       return { key: 'basal', label: 'Solo necesidades basales' };
     }
@@ -1086,6 +1350,9 @@
       return { key: 'clasica', label: 'Rehidratación intravenosa clásica', reason: reason };
     }
     if (score <= 5) {
+      if (intoleranciaOral) {
+        return { key: 'rir', label: 'Rehidratación IV rápida (RIR)', reason: 'intolerancia oral' };
+      }
       return { key: 'rho', label: 'Rehidratación oral (1ª elección)' };
     }
     return { key: 'rir', label: 'Rehidratación IV rápida (RIR)' };
@@ -1107,6 +1374,7 @@
     if (d.edadStr) txt += '  - Edad: ' + d.edadStr + '\n';
     txt += '  - Sodio sérico (Na+): ' + fmt(d.na, 0) + ' mEq/L\n';
     if (d.comorbilidad) txt += '  - Inestabilidad hemodinámica o comorbilidad relevante: SÍ\n';
+    if (d.intoleranciaOral) txt += '  - Intolerancia oral: SÍ\n';
     txt += '\n';
 
     txt += 'VALORACIÓN CLÍNICA (Escala de Gorelick)\n';
@@ -1165,6 +1433,7 @@
     edadAnos = edadAnos ? edadAnos.toString().replace(/\s+/g, '') : '';
     edadMeses = edadMeses ? edadMeses.toString().replace(/\s+/g, '') : '';
     var comorbilidad = document.getElementById('comorbilidad').checked;
+    var intoleranciaOral = document.getElementById('intoleranciaOral').checked;
     var resEl = document.getElementById('results');
     var altEl = document.getElementById('alternative');
     var pasteEl = document.getElementById('pasteArea');
@@ -1208,7 +1477,7 @@
       diagnostico = 'Deshidratación ' + sNa.label + ' ' + sevShort + ' (aprox. ' + defPct + '%)';
     }
 
-    var strategy = determineStrategy(score, sNa, ageMonths, comorbilidad);
+    var strategy = determineStrategy(score, sNa, ageMonths, comorbilidad, intoleranciaOral);
 
     var observaciones = [];
     var planHTML = '';
@@ -1225,7 +1494,9 @@
             'Estrategia recomendada' +
           '</div>' +
           '<div class="strategy-title">Solo necesidades basales</div>' +
-          '<div class="strategy-sub">El paciente no presenta signos clínicos de deshidratación. Mantener aporte basal hasta tolerancia oral completa.</div>' +
+          '<div class="strategy-sub">El paciente no presenta signos clínicos de deshidratación. ' + (intoleranciaOral
+              ? 'Por <strong>intolerancia oral</strong>, mantener aporte basal por vía IV hasta recuperar la tolerancia.'
+              : 'Mantener aporte basal hasta tolerancia oral completa.') + '</div>' +
           '<div class="plan-grid">' +
             '<div class="plan-cell"><div class="lbl">Volumen / 24 h</div><div class="val">' + fmt(basal, 0) + ' <span class="u">ml</span></div><div class="sub">Holliday-Segar</div></div>' +
             '<div class="plan-cell"><div class="lbl">Ritmo IV</div><div class="val">' + fmt(ritmoBasal, 1) + ' <span class="u">ml/h</span></div><div class="sub">Si no tolera vía oral</div></div>' +
@@ -1290,7 +1561,9 @@
             'Estrategia recomendada' +
           '</div>' +
           '<div class="strategy-title">Rehidratación IV rápida (RIR)</div>' +
-          '<div class="strategy-sub">Tratamiento de elección en deshidratación grave secundaria a GEA (SEUP 2024 - GRADE 2022). Eficaz, segura y acorta la estancia.</div>' +
+          '<div class="strategy-sub">' + (strategy.reason === 'intolerancia oral'
+              ? 'Indicada por <strong>intolerancia oral</strong> en deshidratación leve/moderada sin otras contraindicaciones (SEUP 2024 - GRADE 2022).'
+              : 'Tratamiento de elección en deshidratación grave secundaria a GEA (SEUP 2024 - GRADE 2022). Eficaz, segura y acorta la estancia.') + '</div>' +
           '<div class="plan-grid">' +
             '<div class="plan-cell"><div class="lbl">Ritmo de infusión</div><div class="val">' + fmt(ritmoRIR, 1) + ' <span class="u">ml/h</span></div><div class="sub">20 ml/kg/h, máx 700 ml/h</div></div>' +
             '<div class="plan-cell"><div class="lbl">Tiempo</div><div class="val">' + horasRIR + ' <span class="u">h</span></div><div class="sub">Según evolución clínica</div></div>' +
@@ -1425,7 +1698,7 @@
     }
 
     lastReportText = buildReportText({
-      peso: peso, na: na, edadStr: edadStr, comorbilidad: comorbilidad,
+      peso: peso, na: na, edadStr: edadStr, comorbilidad: comorbilidad, intoleranciaOral: intoleranciaOral,
       score: score, signs: signs, defPct: defPct, severity: severity,
       diagnostico: diagnostico, basal: basal, perdidas: perdidas,
       strategy: strategy, planLines: planLines,
@@ -1525,6 +1798,7 @@
     document.getElementById('edadAnos').value = '';
     document.getElementById('edadMeses').value = '';
     document.getElementById('comorbilidad').checked = false;
+    document.getElementById('intoleranciaOral').checked = false;
     for (var i = 0; i < toggles.length; i++) toggles[i].checked = false;
     updateScore();
     document.getElementById('results').className = 'hidden';
@@ -1566,6 +1840,30 @@
       var next = isDark ? 'light' : 'dark';
       localStorage.setItem(STORAGE_KEY, next);
       applyTheme(next);
+    });
+  })();
+
+  // ── Modal "Acerca de" ──
+  (function(){
+    var overlay = document.getElementById('modalInfo');
+    var inner   = document.getElementById('modalInfoInner');
+
+    function abrirModal(){
+      overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function cerrarModal(){
+      overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('btnInfo').addEventListener('click', abrirModal);
+    document.getElementById('btnCerrarInfo').addEventListener('click', cerrarModal);
+    overlay.addEventListener('click', function(e){
+      if (!inner.contains(e.target)) cerrarModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if (e.key === 'Escape' && overlay.classList.contains('open')) cerrarModal();
     });
   })();
 
