@@ -1168,7 +1168,7 @@
     Basada en <strong>SEUP 2024</strong> y el Documento GRADE de la SEUP (Mora-Capín et al., An Pediatr 2022).<br>
     Herramienta de apoyo a la decisión clínica. Verificar siempre con criterio médico y guías locales.
   </p>
-  <div class="app-autor">HidratIV v1.0.6 · 2026 · por Carlos J. Galán Doval</div>
+  <div class="app-autor">HidratIV v1.0.7 · 2026 · por Carlos J. Galán Doval</div>
 
 </div>
 
@@ -1244,7 +1244,11 @@
           <span>Notas de versión</span>
         </div>
         <div>
-          <div class="modal-nota-tag">v1.0.6 · 2026 · actual</div>
+          <div class="modal-nota-tag">v1.0.7 · 2026 · actual</div>
+          <ul class="modal-nota-lista">
+            <li>Fix: bucle del banner "Nueva versión disponible" en escritorio. El click ahora fuerza skipWaiting del SW (con recarga por controllerchange) y cae a una navegación con cache-buster si el SW no responde.</li>
+          </ul>
+          <div class="modal-nota-tag">v1.0.6 · 2026</div>
           <ul class="modal-nota-lista">
             <li>Despliegue de prueba para verificar end-to-end el nuevo mecanismo de actualización (banner + toast)</li>
           </ul>
@@ -1284,7 +1288,7 @@
 
       <!-- Meta -->
       <div class="modal-meta">
-        <strong>HidratIV</strong> · v1.0.6 · 2026<br>
+        <strong>HidratIV</strong> · v1.0.7 · 2026<br>
         Diseñada y desarrollada por <strong>Carlos J. Galán Doval</strong>
       </div>
 
@@ -1969,20 +1973,61 @@
       });
     });
     function showUpdateBanner(reg) {
-      if (document.querySelector('.update-banner')) return;
-      var b = document.createElement('div');
-      b.className = 'update-banner';
-      b.innerHTML = '<span>Nueva versión disponible</span><button>Actualizar</button>';
-      b.querySelector('button').onclick = function() {
-        if (reg && reg.waiting) {
-          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-        } else {
-          window.location.reload();
-        }
-        b.remove();
-      };
-      document.body.appendChild(b);
+      showUnifiedUpdateBanner(reg || null);
     }
+  }
+
+  // === Banner unificado de actualización ===
+  // Se usa tanto desde el evento updatefound del SW como desde el check
+  // de version.json. Estrategia de "Actualizar":
+  //   1. Si hay un SW esperando -> SKIP_WAITING (el listener
+  //      controllerchange se encarga de recargar).
+  //   2. Si no, intentar reg.update() y aplicar el waiting que aparezca.
+  //   3. Como último recurso, navegación con cache-buster.
+  function showUnifiedUpdateBanner(reg) {
+    if (document.querySelector('.update-banner')) return;
+    var b = document.createElement('div');
+    b.className = 'update-banner';
+    b.innerHTML = '<span>Nueva versión disponible</span><button>Actualizar</button>';
+    b.querySelector('button').onclick = function() {
+      b.querySelector('button').disabled = true;
+      b.querySelector('span').textContent = 'Actualizando…';
+      applyUpdateAndReload(reg);
+    };
+    document.body.appendChild(b);
+  }
+
+  function applyUpdateAndReload(reg) {
+    var done = false;
+    var hardReload = function() {
+      if (done) return; done = true;
+      var u = new URL(window.location.href);
+      u.searchParams.set('v', Date.now().toString());
+      window.location.replace(u.toString());
+    };
+
+    if (!('serviceWorker' in navigator)) { hardReload(); return; }
+
+    var ready = reg ? Promise.resolve(reg) : navigator.serviceWorker.getRegistration();
+    ready.then(function(r) {
+      if (!r) { hardReload(); return; }
+      if (r.waiting) {
+        r.waiting.postMessage({ type: 'SKIP_WAITING' });
+      } else {
+        r.update().catch(function(){});
+        r.addEventListener('updatefound', function() {
+          var nw = r.installing;
+          if (!nw) return;
+          nw.addEventListener('statechange', function() {
+            if (nw.state === 'installed' && r.waiting) {
+              r.waiting.postMessage({ type: 'SKIP_WAITING' });
+            }
+          });
+        });
+      }
+      // Fallback duro si en 4 s no se ha producido controllerchange.
+      setTimeout(hardReload, 4000);
+    }).catch(hardReload);
   }
 
   // === Versión de la app y comprobación independiente vía version.json ===
@@ -1990,17 +2035,10 @@
   // estar version.json excluida del fetch handler del SW desde v1.0.3, no
   // queda atrapada en ninguna caché. Sirve de red de seguridad si el SW
   // falla en detectar la actualización.
-  var APP_VERSION = 'v1.0.6';
+  var APP_VERSION = 'v1.0.7';
 
   function showUpdateBannerSimple() {
-    if (document.querySelector('.update-banner')) return;
-    var b = document.createElement('div');
-    b.className = 'update-banner';
-    b.innerHTML = '<span>Nueva versión disponible</span><button>Actualizar</button>';
-    b.querySelector('button').onclick = function() {
-      window.location.reload();
-    };
-    document.body.appendChild(b);
+    showUnifiedUpdateBanner(null);
   }
 
   function checkRemoteVersion() {
