@@ -9,7 +9,7 @@
  * el banner "Nueva versión disponible" en la app.
  */
 
-const CACHE_VERSION = 'v1.0.4';
+const CACHE_VERSION = 'v1.0.5';
 const CACHE_NAME = 'hidrativ-' + CACHE_VERSION;
 
 const PRECACHE_URLS = [
@@ -58,9 +58,11 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(req.url);
   const path = url.pathname;
-  const isSWorManifest = /\/sw\.js$/.test(path) || /\/manifest\.webmanifest$/.test(path);
+  const isAlwaysNetwork = /\/sw\.js$/.test(path)
+    || /\/manifest\.webmanifest$/.test(path)
+    || /\/version\.json$/.test(path);
 
-  if (isSWorManifest) {
+  if (isAlwaysNetwork) {
     // Network-only: nunca cachear, para que las actualizaciones se detecten.
     event.respondWith(fetch(req).catch(() => new Response('', { status: 503, statusText: 'Offline' })));
     return;

@@ -965,6 +965,24 @@
     -webkit-appearance: none; appearance: none;
   }
 
+  /* ── Toast post-actualización ── */
+  .update-toast {
+    position: fixed; left: 50%; bottom: 24px;
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
+    background: var(--accent, #0e7c7b);
+    color: #fff;
+    padding: 10px 16px; border-radius: 24px;
+    font: 600 0.85rem -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    max-width: calc(100vw - 32px);
+  }
+  .update-toast.show { opacity: 1; }
+
   @media (max-width: 360px) {
     .toggle-label { font-size: 0.88rem; }
     .plan-cell .val { font-size: 1.15rem; }
@@ -1150,7 +1168,7 @@
     Basada en <strong>SEUP 2024</strong> y el Documento GRADE de la SEUP (Mora-Capín et al., An Pediatr 2022).<br>
     Herramienta de apoyo a la decisión clínica. Verificar siempre con criterio médico y guías locales.
   </p>
-  <div class="app-autor">HidratIV v1.0.4 · 2026 · por Carlos J. Galán Doval</div>
+  <div class="app-autor">HidratIV v1.0.5 · 2026 · por Carlos J. Galán Doval</div>
 
 </div>
 
@@ -1226,7 +1244,12 @@
           <span>Notas de versión</span>
         </div>
         <div>
-          <div class="modal-nota-tag">v1.0.4 · 2026 · actual</div>
+          <div class="modal-nota-tag">v1.0.5 · 2026 · actual</div>
+          <ul class="modal-nota-lista">
+            <li>Comprobación de versión independiente del Service Worker (más robusta frente a cachés bloqueadas)</li>
+            <li>Aviso breve de confirmación tras cada actualización</li>
+          </ul>
+          <div class="modal-nota-tag">v1.0.4 · 2026</div>
           <ul class="modal-nota-lista">
             <li>Sincronización de la versión mostrada en el modal de información con la versión real de la app</li>
             <li>Notas de versión con histórico completo</li>
@@ -1257,7 +1280,7 @@
 
       <!-- Meta -->
       <div class="modal-meta">
-        <strong>HidratIV</strong> · v1.0.4 · 2026<br>
+        <strong>HidratIV</strong> · v1.0.5 · 2026<br>
         Diseñada y desarrollada por <strong>Carlos J. Galán Doval</strong>
       </div>
 
@@ -1942,16 +1965,85 @@
       });
     });
     function showUpdateBanner(reg) {
+      if (document.querySelector('.update-banner')) return;
       var b = document.createElement('div');
       b.className = 'update-banner';
       b.innerHTML = '<span>Nueva versión disponible</span><button>Actualizar</button>';
       b.querySelector('button').onclick = function() {
-        if (reg.waiting) reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        if (reg && reg.waiting) {
+          reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+        } else {
+          window.location.reload();
+        }
         b.remove();
       };
       document.body.appendChild(b);
     }
   }
+
+  // === Versión de la app y comprobación independiente vía version.json ===
+  // Esta comprobación va por HTTP directamente (con cache-busting) y, al
+  // estar version.json excluida del fetch handler del SW desde v1.0.3, no
+  // queda atrapada en ninguna caché. Sirve de red de seguridad si el SW
+  // falla en detectar la actualización.
+  var APP_VERSION = 'v1.0.5';
+
+  function showUpdateBannerSimple() {
+    if (document.querySelector('.update-banner')) return;
+    var b = document.createElement('div');
+    b.className = 'update-banner';
+    b.innerHTML = '<span>Nueva versión disponible</span><button>Actualizar</button>';
+    b.querySelector('button').onclick = function() {
+      window.location.reload();
+    };
+    document.body.appendChild(b);
+  }
+
+  function checkRemoteVersion() {
+    try {
+      fetch('./version.json?t=' + Date.now(), { cache: 'no-store' })
+        .then(function(r) { return r.ok ? r.json() : null; })
+        .then(function(data) {
+          if (data && data.version && data.version !== APP_VERSION) {
+            showUpdateBannerSimple();
+          }
+        })
+        .catch(function(){});
+    } catch (e) {}
+  }
+
+  window.addEventListener('load', function() {
+    checkRemoteVersion();
+  });
+  document.addEventListener('visibilitychange', function() {
+    if (document.visibilityState === 'visible') checkRemoteVersion();
+  });
+
+  // === Toast de confirmación tras actualizar ===
+  try {
+    var LAST_KEY = 'hidrativ-last-version';
+    var prev = localStorage.getItem(LAST_KEY);
+    if (prev && prev !== APP_VERSION) {
+      var showToast = function() {
+        if (!document.body) { setTimeout(showToast, 50); return; }
+        var t = document.createElement('div');
+        t.className = 'update-toast';
+        t.textContent = 'Actualizado a ' + APP_VERSION;
+        document.body.appendChild(t);
+        requestAnimationFrame(function(){ t.classList.add('show'); });
+        setTimeout(function() {
+          t.classList.remove('show');
+          setTimeout(function(){ t.remove(); }, 400);
+        }, 2800);
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', showToast);
+      } else {
+        showToast();
+      }
+    }
+    localStorage.setItem(LAST_KEY, APP_VERSION);
+  } catch (e) {}
 </script>
 </body>
 </html>

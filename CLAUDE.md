@@ -59,11 +59,13 @@ Cada ítem marcado suma 1 punto:
 ## Versionado y despliegue
 
 ### Dónde vive la versión
-La versión se mantiene en **cuatro lugares** que deben estar siempre sincronizados:
+La versión se mantiene en **seis lugares** que deben estar siempre sincronizados:
 1. `sw.js` → constante `CACHE_VERSION` (ej. `'v1.0.0'`)
 2. `index.html` → div `.app-autor` al pie (ej. `HidratIV v1.0.0 · 2026 · por Carlos J. Galán Doval`)
 3. `index.html` → modal de información, primer `.modal-nota-tag` con sufijo ` · actual` (ej. `v1.0.0 · 2026 · actual`). El tag de la versión anterior pierde el sufijo ` · actual` y queda como histórico.
 4. `index.html` → bloque `.modal-meta` (ej. `<strong>HidratIV</strong> · v1.0.0 · 2026`)
+5. `index.html` → constante JS `var APP_VERSION = 'vX.X.X';` (usada por el check de versión y el toast post-actualización).
+6. `version.json` → `{"version": "vX.X.X", "year": "2026"}` en la raíz. Sirve a un check de versión vía red que es independiente del Service Worker (red de seguridad si el SW falla en detectar la actualización).
 
 El incremento de `CACHE_VERSION` es lo que activa la actualización automática del Service Worker en los dispositivos de los usuarios finales, sin que tengan que vaciar la caché manualmente.
 
@@ -100,9 +102,14 @@ b) Modal de información:
 c) Bloque `.modal-meta`, sustituyendo la versión:
 `<strong>HidratIV</strong> · vX.X.X · 2026`
 
+d) Constante JS `var APP_VERSION = 'vX.X.X';` (en el último `<script>` del documento).
+
+**Paso 4-bis — Actualizar `version.json`**
+Sustituir el campo `version` en `version.json` por la nueva versión.
+
 **Paso 5 — Commit**
 ```bash
-git add sw.js index.html
+git add sw.js index.html version.json
 git commit -m "$(cat <<'EOF'
 chore: deploy vX.X.X
 
