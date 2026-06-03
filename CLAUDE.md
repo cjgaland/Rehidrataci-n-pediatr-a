@@ -59,9 +59,11 @@ Cada ítem marcado suma 1 punto:
 ## Versionado y despliegue
 
 ### Dónde vive la versión
-La versión se mantiene en **dos lugares** que deben estar siempre sincronizados:
+La versión se mantiene en **cuatro lugares** que deben estar siempre sincronizados:
 1. `sw.js` → constante `CACHE_VERSION` (ej. `'v1.0.0'`)
 2. `index.html` → div `.app-autor` al pie (ej. `HidratIV v1.0.0 · 2026 · por Carlos J. Galán Doval`)
+3. `index.html` → modal de información, primer `.modal-nota-tag` con sufijo ` · actual` (ej. `v1.0.0 · 2026 · actual`). El tag de la versión anterior pierde el sufijo ` · actual` y queda como histórico.
+4. `index.html` → bloque `.modal-meta` (ej. `<strong>HidratIV</strong> · v1.0.0 · 2026`)
 
 El incremento de `CACHE_VERSION` es lo que activa la actualización automática del Service Worker en los dispositivos de los usuarios finales, sin que tengan que vaciar la caché manualmente.
 
@@ -78,8 +80,25 @@ Incrementar el número de parche (patch): `v1.0.0` → `v1.0.1`, `v1.2.9` → `v
 Sustituir `CACHE_VERSION = 'vX.X.X'` por la nueva versión.
 
 **Paso 4 — Actualizar `index.html`**
-Sustituir la versión en el texto del div `.app-autor`, manteniendo el formato:
+Sustituir la versión en **tres** ubicaciones:
+
+a) Div `.app-autor` al pie, manteniendo el formato:
 `HidratIV vX.X.X · 2026 · por Carlos J. Galán Doval`
+
+b) Modal de información:
+- Quitar el sufijo ` · actual` del primer `.modal-nota-tag` (el de la versión saliente).
+- Insertar un nuevo bloque al principio de la lista de notas de versión:
+  ```html
+  <div class="modal-nota-tag">vX.X.X · 2026 · actual</div>
+  <ul class="modal-nota-lista">
+    <li>Resumen breve del cambio principal de esta versión</li>
+    <!-- una línea por cambio relevante -->
+  </ul>
+  ```
+- Redactar las notas en español, en pasado o forma sustantiva, alineadas con el mensaje del commit.
+
+c) Bloque `.modal-meta`, sustituyendo la versión:
+`<strong>HidratIV</strong> · vX.X.X · 2026`
 
 **Paso 5 — Commit**
 ```bash
