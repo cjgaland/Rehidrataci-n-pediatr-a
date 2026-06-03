@@ -9,7 +9,7 @@
  * el banner "Nueva versión disponible" en la app.
  */
 
-const CACHE_VERSION = 'v1.0.2';
+const CACHE_VERSION = 'v1.0.3';
 const CACHE_NAME = 'hidrativ-' + CACHE_VERSION;
 
 const PRECACHE_URLS = [
@@ -45,12 +45,26 @@ self.addEventListener('activate', (event) => {
 });
 
 // === Fetch: cache-first, fallback a red, fallback final a index.html ===
+//
+// IMPORTANTE: sw.js y manifest.webmanifest se sirven SIEMPRE desde red
+// (network-only). Si se cachean, el navegador no detecta cambios al hacer
+// register('./sw.js') y el banner de actualización nunca se dispara.
 self.addEventListener('fetch', (event) => {
   const req = event.request;
 
   // Solo GET y mismo origen
   if (req.method !== 'GET') return;
   if (new URL(req.url).origin !== self.location.origin) return;
+
+  const url = new URL(req.url);
+  const path = url.pathname;
+  const isSWorManifest = /\/sw\.js$/.test(path) || /\/manifest\.webmanifest$/.test(path);
+
+  if (isSWorManifest) {
+    // Network-only: nunca cachear, para que las actualizaciones se detecten.
+    event.respondWith(fetch(req).catch(() => new Response('', { status: 503, statusText: 'Offline' })));
+    return;
+  }
 
   event.respondWith(
     caches.match(req).then((cached) => {

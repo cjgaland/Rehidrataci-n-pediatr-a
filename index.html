@@ -1150,7 +1150,7 @@
     Basada en <strong>SEUP 2024</strong> y el Documento GRADE de la SEUP (Mora-Capín et al., An Pediatr 2022).<br>
     Herramienta de apoyo a la decisión clínica. Verificar siempre con criterio médico y guías locales.
   </p>
-  <div class="app-autor">HidratIV v1.0.2 · 2026 · por Carlos J. Galán Doval</div>
+  <div class="app-autor">HidratIV v1.0.3 · 2026 · por Carlos J. Galán Doval</div>
 
 </div>
 
@@ -1896,7 +1896,11 @@
   // === Registro del Service Worker (PWA offline + actualizaciones) ===
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
-      navigator.serviceWorker.register('./sw.js').then(function(reg) {
+      navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(function(reg) {
+        // Si ya hay un SW esperando al cargar, mostrar banner de inmediato.
+        if (reg.waiting && navigator.serviceWorker.controller) {
+          showUpdateBanner(reg);
+        }
         reg.addEventListener('updatefound', function() {
           var nw = reg.installing;
           if (!nw) return;
@@ -1905,6 +1909,14 @@
               showUpdateBanner(reg);
             }
           });
+        });
+        // Forzar comprobación de actualización en cada carga.
+        try { reg.update(); } catch (e) {}
+        // Comprobar también cuando la app vuelve a primer plano (iOS PWA).
+        document.addEventListener('visibilitychange', function() {
+          if (document.visibilityState === 'visible') {
+            try { reg.update(); } catch (e) {}
+          }
         });
       }).catch(function(){});
       var refreshing = false;
